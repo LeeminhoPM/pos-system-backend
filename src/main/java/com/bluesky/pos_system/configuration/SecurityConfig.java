@@ -20,6 +20,7 @@ import java.util.List;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        session lưu thông tin người dùng => dùng token nên tắt session
         return http.sessionManagement(management -> management.
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ).authorizeHttpRequests(authorize -> authorize

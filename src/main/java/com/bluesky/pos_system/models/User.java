@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,14 +33,20 @@ public class User {
 
     String phone;
 
+    @ManyToOne
+    Store store;
+
     @Column(nullable = false)
     UserRole roles;
 
     @Column(nullable = false)
     String password;
 
+    @CreationTimestamp
+    @Column(updatable = false)
     LocalDate createdAt;
 
+    @UpdateTimestamp
     LocalDate updatedAt;
 
     LocalDateTime lastLogin;
