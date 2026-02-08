@@ -1,5 +1,6 @@
 package com.bluesky.pos_system.mappers;
 
+import com.bluesky.pos_system.models.Category;
 import com.bluesky.pos_system.models.Product;
 import com.bluesky.pos_system.models.Store;
 import com.bluesky.pos_system.payload.dto.ProductDTO;
@@ -16,13 +17,15 @@ public class ProductMapper {
                 .sellingPrice(product.getSellingPrice())
                 .image(product.getImage())
                 .store(StoreMapper.toDTO(product.getStore()))
+                .category(CategoryMapper.toDTO(product.getCategory()))
+                .categoryId(product.getCategory().getId())
                 .storeId(product.getStore().getId())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .build();
     }
 
-    public static Product toEntity(ProductDTO productDTO, Store store) {
+    public static Product toEntity(ProductDTO productDTO, Store store, Category category) {
         return Product.builder()
                 .name(productDTO.getName())
                 .brand(productDTO.getBrand())
@@ -31,6 +34,7 @@ public class ProductMapper {
                 .mrp(productDTO.getMrp())
                 .sellingPrice(productDTO.getSellingPrice())
                 .image(productDTO.getImage())
+                .category(category)
                 .store(store)
                 .build();
     }

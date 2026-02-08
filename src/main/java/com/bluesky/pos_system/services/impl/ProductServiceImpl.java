@@ -1,10 +1,12 @@
 package com.bluesky.pos_system.services.impl;
 
 import com.bluesky.pos_system.mappers.ProductMapper;
+import com.bluesky.pos_system.models.Category;
 import com.bluesky.pos_system.models.Product;
 import com.bluesky.pos_system.models.Store;
 import com.bluesky.pos_system.models.User;
 import com.bluesky.pos_system.payload.dto.ProductDTO;
+import com.bluesky.pos_system.repositories.CategoryRepository;
 import com.bluesky.pos_system.repositories.ProductRepository;
 import com.bluesky.pos_system.repositories.StoreRepository;
 import com.bluesky.pos_system.services.ProductService;
@@ -22,13 +24,17 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     StoreRepository storeRepository;
+    CategoryRepository categoryRepository;
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO, User user) {
         Store store = storeRepository.findById(productDTO.getStoreId()).orElseThrow(
                 () -> new RuntimeException("Cửa hàng với id: " + productDTO.getStoreId() + " không được tìm thấy")
         );
-        Product product = ProductMapper.toEntity(productDTO, store);
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(
+                () -> new RuntimeException("Danh mục với id: " + productDTO.getStoreId() + " không được tìm thấy")
+        );
+        Product product = ProductMapper.toEntity(productDTO, store, category);
         return ProductMapper.toDTO(productRepository.save(product));
     }
 
@@ -38,6 +44,14 @@ public class ProductServiceImpl implements ProductService {
                 () -> new RuntimeException("Không tìm thấy sản phẩm")
         );
 
+        if (productDTO.getCategoryId() != null) {
+            Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(
+                    () -> new RuntimeException("Danh mục với id: " + productDTO.getStoreId() + " không được tìm thấy")
+            );
+            if (category != null) {
+                product.setCategory(category);
+            }
+        }
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setSku(productDTO.getSku());

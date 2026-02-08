@@ -37,7 +37,8 @@ public class Product {
 
     String image;
 
-//    Category category;
+    @ManyToOne
+    Category category;
 
     @ManyToOne
     Store store;

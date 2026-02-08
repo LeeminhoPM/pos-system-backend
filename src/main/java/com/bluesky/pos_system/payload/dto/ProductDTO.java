@@ -28,9 +28,9 @@ public class ProductDTO {
 
     String image;
 
-//    CategoryDTO category;
+    CategoryDTO category;
 
-//    UUID categoryId;
+    UUID categoryId;
 
     StoreDTO store;
 
